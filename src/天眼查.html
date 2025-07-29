@@ -80,16 +80,31 @@
         font-size: 0.875rem;
         margin-top: 0.25rem;
       }
+      /* Windows系统适配样式 */
+      .win-btn {
+        -webkit-app-region: no-drag;
+        transition: all 0.1s ease;
+      }
+      .win-btn:active {
+        transform: scale(0.95);
+      }
+      .no-drag {
+        -webkit-app-region: no-drag;
+      }
+      .drag-region {
+        -webkit-app-region: drag;
+      }
     }
   </style>
   
-  <!-- 导入字体 -->
+  <!-- 预加载字体 -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" as="style">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body class="bg-space-black text-gray-200 min-h-screen bg-grid overflow-x-hidden">
-  <!-- 顶部导航栏 -->
-  <header class="relative glass-effect border-b border-neon-blue/30 py-4 px-6">
+  <!-- 顶部导航栏 - 可拖拽区域 -->
+  <header class="relative glass-effect border-b border-neon-blue/30 py-4 px-6 drag-region">
     <div class="container mx-auto flex justify-between items-center">
       <div class="flex items-center space-x-3">
         <i class="fa fa-database text-warm-gold text-3xl animate-pulse-slow"></i>
@@ -120,7 +135,7 @@
   </header>
 
   <main class="container mx-auto px-4 py-8 flex flex-col lg:flex-row gap-6">
-    <!-- 左侧管理栏 - 固定占1/4宽度，文字横向显示 -->
+    <!-- 左侧管理栏 -->
     <aside class="w-full lg:w-1/4 glass-effect rounded-lg p-4 border border-neon-blue/20 h-fit">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <h2 class="text-xl font-cyber font-semibold text-warm-gold flex items-center whitespace-nowrap">
@@ -128,15 +143,15 @@
         </h2>
         
         <div class="flex flex-wrap gap-2">
-          <button id="add-person" class="text-left px-4 py-2 rounded hover:bg-deep-blue/50 transition-all duration-300 flex items-center text-sm whitespace-nowrap">
+          <button id="add-person" class="win-btn text-left px-4 py-2 rounded hover:bg-deep-blue/50 transition-all duration-300 flex items-center text-sm whitespace-nowrap">
             <i class="fa fa-user-plus text-green-400 mr-2 w-5 text-center"></i>
             <span>添加人员</span>
           </button>
-          <button id="update-data" class="text-left px-4 py-2 rounded hover:bg-deep-blue/50 transition-all duration-300 flex items-center text-sm whitespace-nowrap">
+          <button id="update-data" class="win-btn text-left px-4 py-2 rounded hover:bg-deep-blue/50 transition-all duration-300 flex items-center text-sm whitespace-nowrap">
             <i class="fa fa-refresh text-neon-blue mr-2 w-5 text-center"></i>
             <span>更新数据</span>
           </button>
-          <button id="clear-all" class="text-left px-4 py-2 rounded hover:bg-deep-blue/50 transition-all duration-300 flex items-center text-sm text-red-300 whitespace-nowrap">
+          <button id="clear-all" class="win-btn text-left px-4 py-2 rounded hover:bg-deep-blue/50 transition-all duration-300 flex items-center text-sm text-red-300 whitespace-nowrap">
             <i class="fa fa-trash mr-2 w-5 text-center"></i>
             <span>清空所有数据</span>
           </button>
@@ -168,7 +183,7 @@
       </div>
     </aside>
 
-    <!-- 右侧查询区域 - 占3/4宽度 -->
+    <!-- 右侧查询区域 -->
     <section class="flex-1 space-y-6">
       <!-- 查询卡片 -->
       <div class="glass-effect rounded-lg p-6 border border-neon-blue/20">
@@ -181,7 +196,7 @@
             <div class="flex-1 min-w-[280px]">
               <label class="block text-sm text-gray-300 mb-1">查询类型</label>
               <div class="relative">
-                <select id="query-type" class="w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 pr-8 focus:outline-none focus:border-warm-gold transition-colors appearance-none">
+                <select id="query-type" class="no-drag w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 pr-8 focus:outline-none focus:border-warm-gold transition-colors appearance-none">
                   <option value="name">姓名</option>
                   <option value="id">身份证号</option>
                   <option value="phone">手机号</option>
@@ -197,8 +212,8 @@
               <label class="block text-sm text-gray-300 mb-1">查询内容</label>
               <div class="relative">
                 <input type="text" id="query-content" placeholder="请输入查询内容..." 
-                  class="w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
-                <button id="query-btn" class="absolute right-1 top-1 bg-warm-gold/80 hover:bg-warm-gold text-space-black px-3 py-1 rounded text-sm transition-colors">
+                  class="no-drag w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
+                <button id="query-btn" class="win-btn absolute right-1 top-1 bg-warm-gold/80 hover:bg-warm-gold text-space-black px-3 py-1 rounded text-sm transition-colors">
                   <i class="fa fa-search mr-1"></i>查询
                 </button>
               </div>
@@ -222,7 +237,7 @@
             <i class="fa fa-user mr-2"></i>查询结果
             <span id="result-count" class="ml-2 text-sm text-gray-400 font-normal"></span>
           </h2>
-          <button id="close-results" class="text-gray-400 hover:text-white transition-colors">
+          <button id="close-results" class="win-btn text-gray-400 hover:text-white transition-colors">
             <i class="fa fa-times"></i> 关闭
           </button>
         </div>
@@ -273,10 +288,10 @@
     </section>
   </main>
   
-  <!-- 模态框 - 添加人员 -->
+  <!-- 模态框 - 添加/编辑人员 -->
   <div id="add-modal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden">
     <div class="glass-effect rounded-lg w-full max-w-md border border-neon-blue/30 relative">
-      <button id="close-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+      <button id="close-modal" class="win-btn absolute top-4 right-4 text-gray-400 hover:text-white">
         <i class="fa fa-times"></i>
       </button>
       
@@ -284,28 +299,30 @@
         <h3 id="modal-title" class="text-xl font-cyber font-semibold mb-4 text-warm-gold">添加人员信息</h3>
         
         <form id="add-form" class="space-y-4">
+          <input type="hidden" id="edit-id" value="">
+          
           <div>
             <label class="block text-sm text-gray-300 mb-1">姓名</label>
             <input type="text" id="name" required 
-              class="w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
+              class="no-drag w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
           </div>
           
           <div>
             <label class="block text-sm text-gray-300 mb-1">身份证号</label>
             <input type="text" id="id-card" required 
-              class="w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
+              class="no-drag w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
           </div>
           
           <div>
             <label class="block text-sm text-gray-300 mb-1">手机号</label>
             <input type="text" id="phone" required 
-              class="w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
+              class="no-drag w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
           </div>
           
           <div>
             <label class="block text-sm text-gray-300 mb-1">职业</label>
             <select id="occupation" required
-              class="w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
+              class="no-drag w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
               <option value="">请选择职业</option>
               <option value="警察">警察</option>
               <option value="工人">工人</option>
@@ -341,25 +358,25 @@
           <div>
             <label class="block text-sm text-gray-300 mb-1">QQ号</label>
             <input type="text" id="qq" 
-              class="w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
+              class="no-drag w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
           </div>
           
           <div>
             <label class="block text-sm text-gray-300 mb-1">微信号</label>
             <input type="text" id="wechat" 
-              class="w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
+              class="no-drag w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
           </div>
           
           <div>
             <label class="block text-sm text-gray-300 mb-1">抖音号</label>
             <input type="text" id="douyin" 
-              class="w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
+              class="no-drag w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
           </div>
           
           <div>
             <label class="block text-sm text-gray-300 mb-1">家庭住址</label>
             <input type="text" id="address" 
-              class="w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
+              class="no-drag w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
           </div>
           
           <div class="pt-2 border-t border-neon-blue/20">
@@ -369,37 +386,37 @@
               <div>
                 <label class="block text-sm text-gray-300 mb-1">父亲姓名</label>
                 <input type="text" id="father-name" 
-                  class="w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
+                  class="no-drag w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
               </div>
               
               <div>
                 <label class="block text-sm text-gray-300 mb-1">父亲身份证号</label>
                 <input type="text" id="father-id" 
-                  class="w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
+                  class="no-drag w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
               </div>
               
               <div>
                 <label class="block text-sm text-gray-300 mb-1">母亲姓名</label>
                 <input type="text" id="mother-name" 
-                  class="w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
+                  class="no-drag w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
               </div>
               
               <div>
                 <label class="block text-sm text-gray-300 mb-1">母亲身份证号</label>
                 <input type="text" id="mother-id" 
-                  class="w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
+                  class="no-drag w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
               </div>
               
               <div>
                 <label class="block text-sm text-gray-300 mb-1">子女信息（格式：姓名,身份证号;姓名,身份证号）</label>
                 <input type="text" id="children-info" placeholder="例如：张三,110101199001011234;李四,110101199501011234"
-                  class="w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
+                  class="no-drag w-full bg-deep-blue/50 border border-neon-blue/30 rounded px-4 py-2 focus:outline-none focus:border-warm-gold transition-colors">
               </div>
             </div>
           </div>
           
           <div class="pt-4">
-            <button type="submit" class="w-full bg-warm-gold/80 hover:bg-warm-gold text-space-black py-2 rounded transition-colors font-medium">
+            <button type="submit" class="win-btn w-full bg-warm-gold/80 hover:bg-warm-gold text-space-black py-2 rounded transition-colors font-medium">
               保存信息
             </button>
           </div>
@@ -416,12 +433,29 @@
       <p id="confirm-message" class="mb-6 text-gray-300">您确定要执行此操作吗？</p>
       
       <div class="flex gap-4">
-        <button id="confirm-cancel" class="flex-1 bg-gray-700/50 hover:bg-gray-600 py-2 rounded transition-colors">
+        <button id="confirm-cancel" class="win-btn flex-1 bg-gray-700/50 hover:bg-gray-600 py-2 rounded transition-colors">
           取消
         </button>
-        <button id="confirm-ok" class="flex-1 bg-red-600/80 hover:bg-red-600 py-2 rounded transition-colors">
+        <button id="confirm-ok" class="win-btn flex-1 bg-red-600/80 hover:bg-red-600 py-2 rounded transition-colors">
           确认
         </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 详情模态框 -->
+  <div id="detail-modal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden">
+    <div class="glass-effect rounded-lg w-full max-w-2xl border border-neon-blue/30 relative">
+      <button id="close-detail" class="win-btn absolute top-4 right-4 text-gray-400 hover:text-white">
+        <i class="fa fa-times"></i>
+      </button>
+      
+      <div class="modal-scroll p-6">
+        <h3 class="text-xl font-cyber font-semibold mb-6 text-warm-gold">人员详细信息</h3>
+        
+        <div id="person-detail" class="space-y-6">
+          <!-- 详情内容将通过JavaScript动态生成 -->
+        </div>
       </div>
     </div>
   </div>
@@ -437,6 +471,7 @@
     let peopleData = [];
     let searchResults = [];
     let currentAction = null;
+    let currentIndex = -1;
     // 数据库人口基数（20-30亿之间）
     let basePopulation = 25689451234;
     
@@ -471,24 +506,42 @@
     
     // 从localStorage加载永久数据
     function loadPermanentData() {
-      const data = localStorage.getItem(PERMANENT_DATA_KEY);
-      return data ? JSON.parse(data) : [];
+      try {
+        const data = localStorage.getItem(PERMANENT_DATA_KEY);
+        return data ? JSON.parse(data) : [];
+      } catch (e) {
+        console.error('加载永久数据失败:', e);
+        return [];
+      }
     }
     
     // 保存永久数据到localStorage
     function savePermanentData(data) {
-      localStorage.setItem(PERMANENT_DATA_KEY, JSON.stringify(data));
+      try {
+        localStorage.setItem(PERMANENT_DATA_KEY, JSON.stringify(data));
+      } catch (e) {
+        console.error('保存永久数据失败:', e);
+      }
     }
     
     // 从localStorage加载系统数据
     function loadSystemData() {
-      const data = localStorage.getItem(SYSTEM_DATA_KEY);
-      return data ? JSON.parse(data) : [];
+      try {
+        const data = localStorage.getItem(SYSTEM_DATA_KEY);
+        return data ? JSON.parse(data) : [];
+      } catch (e) {
+        console.error('加载系统数据失败:', e);
+        return [];
+      }
     }
     
     // 保存系统数据到localStorage
     function saveSystemData(data) {
-      localStorage.setItem(SYSTEM_DATA_KEY, JSON.stringify(data));
+      try {
+        localStorage.setItem(SYSTEM_DATA_KEY, JSON.stringify(data));
+      } catch (e) {
+        console.error('保存系统数据失败:', e);
+      }
     }
     
     // 生成随机姓名
@@ -608,7 +661,7 @@
       return prefix + suffix;
     }
     
-    // 生成随机人员数据，实现子女随父亲姓，父亲随子女姓的特殊规则
+    // 生成随机人员数据
     function generatePerson(customFields = {}) {
       // 生成一个随机的孩子
       const childFamilyName = familyNames[Math.floor(Math.random() * familyNames.length)];
@@ -701,8 +754,572 @@
       return reg.test(phone);
     }
     
-    // 页面加载时生成数据
+    // 显示通知
+    function showNotification(message, isError = false) {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg transform transition-transform duration-300 z-50 max-w-xs ${isError ? 'bg-red-600/90 text-white' : 'bg-green-600/90 text-white'}`;
+      
+      // 显示通知
+      setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+      }, 10);
+      
+      // 3秒后隐藏通知
+      setTimeout(() => {
+        notification.style.transform = 'translateX(calc(100% + 20px))';
+      }, 3000);
+    }
+    
+    // 更新表格显示
+    function updateTable() {
+      const tableBody = document.getElementById('data-table-body');
+      
+      if (peopleData.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="6" class="py-8 text-center text-gray-500">
+              <i class="fa fa-database mr-2"></i>暂无数据，请添加数据
+            </td>
+          </tr>
+        `;
+        document.getElementById('display-count').textContent = '显示 0 条记录';
+        return;
+      }
+      
+      let html = '';
+      peopleData.forEach((person, index) => {
+        // 检查是否为永久数据
+        const permanentData = loadPermanentData();
+        const isPermanent = permanentData.some(p => p.id === person.id);
+        
+        html += `
+          <tr class="border-b border-neon-blue/10 hover:bg-deep-blue/20 transition-colors">
+            <td class="py-3 px-4">
+              ${person.name}
+              ${isPermanent ? '<span class="ml-2 text-xs bg-warm-gold/20 text-warm-gold px-1 rounded">永久</span>' : ''}
+            </td>
+            <td class="py-3 px-4">${person.id}</td>
+            <td class="py-3 px-4">${person.phone}</td>
+            <td class="py-3 px-4">${person.age}</td>
+            <td class="py-3 px-4">${person.occupation}</td>
+            <td class="py-3 px-4">
+              <div class="flex space-x-2">
+                <button onclick="viewPerson(${index})" class="win-btn text-neon-blue hover:text-glow-blue transition-colors" title="查看">
+                  <i class="fa fa-eye"></i>
+                </button>
+                <button onclick="editPerson(${index})" class="win-btn text-warm-gold hover:text-yellow-300 transition-colors" title="编辑">
+                  <i class="fa fa-edit"></i>
+                </button>
+                <button onclick="deletePerson(${index})" class="win-btn text-red-400 hover:text-red-300 transition-colors" title="删除">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+      
+      tableBody.innerHTML = html;
+      document.getElementById('display-count').textContent = `显示 ${peopleData.length} 条记录`;
+    }
+    
+    // 更新记录计数
+    function updateRecordCount() {
+      document.getElementById('record-count').textContent = `记录总数: ${peopleData.length}`;
+      
+      // 随机波动数据库人口数量（±1000万范围内）
+      const fluctuation = Math.floor(Math.random() * 20000000) - 10000000;
+      const currentPopulation = basePopulation + fluctuation;
+      
+      // 格式化显示
+      document.getElementById('database-population').textContent = 
+        `当前数据库人数: ${currentPopulation.toLocaleString()}`;
+    }
+    
+    // 更新服务器状态
+    function updateServerStats() {
+      // 生成随机服务器负荷 (10-60%)
+      const load = Math.floor(Math.random() * 51) + 10;
+      document.getElementById('server-load').textContent = `${load}%`;
+      document.getElementById('load-bar').style.width = `${load}%`;
+      
+      // 生成随机服务器温度 (30-60°C)
+      const temp = Math.floor(Math.random() * 31) + 30;
+      document.getElementById('server-temp').textContent = `${temp}°C`;
+      // 温度百分比映射 (30°C=20%, 60°C=80%)
+      const tempPercent = ((temp - 30) / 30) * 60 + 20;
+      document.getElementById('temp-bar').style.width = `${tempPercent}%`;
+      
+      // 根据温度改变颜色
+      const tempBar = document.getElementById('temp-bar');
+      if (temp < 40) {
+        tempBar.className = 'progress-value bg-neon-blue';
+      } else if (temp < 50) {
+        tempBar.className = 'progress-value bg-green-500';
+      } else {
+        tempBar.className = 'progress-value bg-yellow-500';
+      }
+    }
+    
+    // 更新时间显示
+    function updateTime() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('current-time').textContent = `${hours}:${minutes}:${seconds}`;
+    }
+    
+    // 打开添加人员模态框
+    function openAddModal() {
+      document.getElementById('modal-title').textContent = '添加人员信息';
+      document.getElementById('edit-id').value = '';
+      document.getElementById('add-form').reset();
+      document.getElementById('add-modal').classList.remove('hidden');
+    }
+    
+    // 关闭模态框
+    function closeModal() {
+      document.getElementById('add-modal').classList.add('hidden');
+    }
+    
+    // 打开详情模态框
+    function viewPerson(index) {
+      const person = peopleData[index];
+      if (!person) return;
+      
+      // 解析子女信息
+      let childrenHtml = '';
+      if (person.childrenInfo) {
+        const children = person.childrenInfo.split(';');
+        childrenHtml = '<ul class="list-disc list-inside pl-4">';
+        children.forEach(child => {
+          const [name, id] = child.split(',');
+          childrenHtml += `<li>${name} (${id || ''})</li>`;
+        });
+        childrenHtml += '</ul>';
+      } else {
+        childrenHtml = '<p>无记录</p>';
+      }
+      
+      // 构建详情HTML
+      const detailHtml = `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <h4 class="text-warm-gold text-sm mb-1">姓名</h4>
+            <p>${person.name}</p>
+          </div>
+          <div>
+            <h4 class="text-warm-gold text-sm mb-1">身份证号</h4>
+            <p>${person.id}</p>
+          </div>
+          <div>
+            <h4 class="text-warm-gold text-sm mb-1">手机号</h4>
+            <p>${person.phone}</p>
+          </div>
+          <div>
+            <h4 class="text-warm-gold text-sm mb-1">年龄</h4>
+            <p>${person.age}</p>
+          </div>
+          <div>
+            <h4 class="text-warm-gold text-sm mb-1">职业</h4>
+            <p>${person.occupation}</p>
+          </div>
+          <div>
+            <h4 class="text-warm-gold text-sm mb-1">QQ号</h4>
+            <p>${person.qq || '未填写'}</p>
+          </div>
+          <div>
+            <h4 class="text-warm-gold text-sm mb-1">微信号</h4>
+            <p>${person.wechat || '未填写'}</p>
+          </div>
+          <div>
+            <h4 class="text-warm-gold text-sm mb-1">抖音号</h4>
+            <p>${person.douyin || '未填写'}</p>
+          </div>
+          <div class="md:col-span-2">
+            <h4 class="text-warm-gold text-sm mb-1">家庭住址</h4>
+            <p>${person.address}</p>
+          </div>
+        </div>
+        
+        <div class="pt-4 border-t border-neon-blue/20">
+          <h4 class="text-warm-gold text-sm mb-3">家庭成员信息</h4>
+          
+          <div class="space-y-4">
+            <div>
+              <h5 class="text-gray-300 text-sm mb-1">父亲</h5>
+              <p>${person.fatherName || '未填写'} ${person.fatherId ? `(${person.fatherId})` : ''}</p>
+            </div>
+            
+            <div>
+              <h5 class="text-gray-300 text-sm mb-1">母亲</h5>
+              <p>${person.motherName || '未填写'} ${person.motherId ? `(${person.motherId})` : ''}</p>
+            </div>
+            
+            <div>
+              <h5 class="text-gray-300 text-sm mb-1">子女</h5>
+              ${childrenHtml}
+            </div>
+          </div>
+        </div>
+      `;
+      
+      document.getElementById('person-detail').innerHTML = detailHtml;
+      document.getElementById('detail-modal').classList.remove('hidden');
+    }
+    
+    // 关闭详情模态框
+    function closeDetailModal() {
+      document.getElementById('detail-modal').classList.add('hidden');
+    }
+    
+    // 编辑人员信息
+    function editPerson(index) {
+      const person = peopleData[index];
+      if (!person) return;
+      
+      // 填充表单数据
+      document.getElementById('modal-title').textContent = '编辑人员信息';
+      document.getElementById('edit-id').value = person.id;
+      document.getElementById('name').value = person.name;
+      document.getElementById('id-card').value = person.id;
+      document.getElementById('phone').value = person.phone;
+      document.getElementById('occupation').value = person.occupation;
+      document.getElementById('qq').value = person.qq || '';
+      document.getElementById('wechat').value = person.wechat || '';
+      document.getElementById('douyin').value = person.douyin || '';
+      document.getElementById('address').value = person.address;
+      document.getElementById('father-name').value = person.fatherName || '';
+      document.getElementById('father-id').value = person.fatherId || '';
+      document.getElementById('mother-name').value = person.motherName || '';
+      document.getElementById('mother-id').value = person.motherId || '';
+      document.getElementById('children-info').value = person.childrenInfo || '';
+      
+      // 记录当前编辑的索引
+      currentIndex = index;
+      
+      // 显示模态框
+      document.getElementById('add-modal').classList.remove('hidden');
+    }
+    
+    // 删除人员信息
+    function deletePerson(index) {
+      const person = peopleData[index];
+      if (!person) return;
+      
+      // 检查是否为永久数据
+      const permanentData = loadPermanentData();
+      const isPermanent = permanentData.some(p => p.id === person.id);
+      
+      if (isPermanent) {
+        showNotification('无法删除永久数据', true);
+        return;
+      }
+      
+      // 显示确认对话框
+      currentAction = 'delete';
+      currentIndex = index;
+      document.getElementById('confirm-message').textContent = `您确定要删除 ${person.name} 的信息吗？`;
+      document.getElementById('confirm-dialog').classList.remove('hidden');
+    }
+    
+    // 处理添加/编辑表单提交
+    function handleAddFormSubmit(e) {
+      e.preventDefault();
+      
+      // 获取表单数据
+      const id = document.getElementById('id-card').value.trim();
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const occupation = document.getElementById('occupation').value;
+      const qq = document.getElementById('qq').value.trim();
+      const wechat = document.getElementById('wechat').value.trim();
+      const douyin = document.getElementById('douyin').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const fatherName = document.getElementById('father-name').value.trim();
+      const fatherId = document.getElementById('father-id').value.trim();
+      const motherName = document.getElementById('mother-name').value.trim();
+      const motherId = document.getElementById('mother-id').value.trim();
+      const childrenInfo = document.getElementById('children-info').value.trim();
+      
+      // 验证数据
+      let isValid = true;
+      
+      if (!name) {
+        showError('name', '请输入姓名');
+        isValid = false;
+      } else {
+        clearError('name');
+      }
+      
+      if (!id || !validateIdCard(id)) {
+        showError('id-card', '请输入有效的身份证号');
+        isValid = false;
+      } else {
+        clearError('id-card');
+      }
+      
+      if (!phone || !validatePhone(phone)) {
+        showError('phone', '请输入有效的手机号');
+        isValid = false;
+      } else {
+        clearError('phone');
+      }
+      
+      if (!occupation) {
+        showError('occupation', '请选择职业');
+        isValid = false;
+      } else {
+        clearError('occupation');
+      }
+      
+      if (!isValid) return;
+      
+      // 创建人员对象
+      const person = {
+        name,
+        id,
+        phone,
+        occupation,
+        age: calculateAge(id),
+        qq,
+        wechat,
+        douyin,
+        address,
+        fatherName,
+        fatherId,
+        motherName,
+        motherId,
+        childrenInfo
+      };
+      
+      const editId = document.getElementById('edit-id').value;
+      
+      if (editId) {
+        // 更新现有记录
+        peopleData[currentIndex] = person;
+        saveSystemData(peopleData.filter(p => !loadPermanentData().some(per => per.id === p.id)));
+        showNotification('信息更新成功');
+      } else {
+        // 检查ID是否已存在
+        if (peopleData.some(p => p.id === id)) {
+          showError('id-card', '此身份证号已存在');
+          return;
+        }
+        
+        // 添加新记录
+        peopleData.push(person);
+        // 保存到系统数据
+        const systemData = loadSystemData();
+        systemData.push(person);
+        saveSystemData(systemData);
+        showNotification('信息添加成功');
+      }
+      
+      // 关闭模态框并更新表格
+      closeModal();
+      updateTable();
+      updateRecordCount();
+    }
+    
+    // 显示错误信息
+    function showError(fieldId, message) {
+      const field = document.getElementById(fieldId);
+      const errorElement = document.createElement('div');
+      errorElement.className = 'error-text';
+      errorElement.id = `${fieldId}-error`;
+      errorElement.textContent = message;
+      
+      field.classList.add('error-border');
+      
+      // 如果错误元素已存在则替换，否则添加
+      const existingError = document.getElementById(`${fieldId}-error`);
+      if (existingError) {
+        existingError.replaceWith(errorElement);
+      } else {
+        field.parentNode.appendChild(errorElement);
+      }
+    }
+    
+    // 清除错误信息
+    function clearError(fieldId) {
+      const field = document.getElementById(fieldId);
+      const errorElement = document.getElementById(`${fieldId}-error`);
+      
+      field.classList.remove('error-border');
+      if (errorElement) {
+        errorElement.remove();
+      }
+    }
+    
+    // 处理清空所有数据
+    function handleClearAll() {
+      currentAction = 'clearAll';
+      document.getElementById('confirm-message').textContent = '您确定要清空所有数据吗？此操作不可恢复！';
+      document.getElementById('confirm-dialog').classList.remove('hidden');
+    }
+    
+    // 处理更新数据
+    function handleUpdateData() {
+      // 生成5-15条新数据
+      const newDataCount = Math.floor(Math.random() * 11) + 5;
+      const newData = generatePeopleData(newDataCount);
+      
+      // 保留永久数据，替换系统数据
+      const permanentData = loadPermanentData();
+      peopleData = [...permanentData, ...newData];
+      saveSystemData(newData);
+      
+      updateTable();
+      updateRecordCount();
+      showNotification(`已更新数据，新增 ${newDataCount} 条记录`);
+    }
+    
+    // 关闭确认对话框
+    function closeConfirmDialog() {
+      document.getElementById('confirm-dialog').classList.add('hidden');
+      currentAction = null;
+      currentIndex = -1;
+    }
+    
+    // 执行确认的操作
+    function executeConfirmAction() {
+      if (currentAction === 'delete' && currentIndex !== -1) {
+        // 执行删除操作
+        const deletedPerson = peopleData.splice(currentIndex, 1)[0];
+        // 更新系统数据
+        const systemData = loadSystemData();
+        const updatedSystemData = systemData.filter(p => p.id !== deletedPerson.id);
+        saveSystemData(updatedSystemData);
+        
+        updateTable();
+        updateRecordCount();
+        showNotification('信息已删除');
+      } else if (currentAction === 'clearAll') {
+        // 执行清空操作（保留永久数据）
+        const permanentData = loadPermanentData();
+        peopleData = [...permanentData];
+        saveSystemData([]);
+        
+        updateTable();
+        updateRecordCount();
+        showNotification('所有数据已清空（保留永久数据）');
+      }
+      
+      closeConfirmDialog();
+    }
+    
+    // 执行搜索
+    function performSearch() {
+      const queryType = document.getElementById('query-type').value;
+      const queryContent = document.getElementById('query-content').value.trim();
+      
+      if (!queryContent) {
+        document.getElementById('query-error').textContent = '请输入查询内容';
+        document.getElementById('query-error').classList.remove('hidden');
+        document.getElementById('query-content').classList.add('error-border');
+        return;
+      }
+      
+      // 清除错误状态
+      document.getElementById('query-error').classList.add('hidden');
+      document.getElementById('query-content').classList.remove('error-border');
+      
+      // 执行搜索
+      searchResults = peopleData.filter(person => {
+        const value = person[queryType] || '';
+        return value.toString().toLowerCase().includes(queryContent.toLowerCase());
+      });
+      
+      // 显示结果
+      const resultsContainer = document.getElementById('result-container');
+      const resultsElement = document.getElementById('results');
+      const noResultElement = document.getElementById('no-result');
+      const resultCountElement = document.getElementById('result-count');
+      
+      resultsContainer.classList.remove('hidden');
+      resultCountElement.textContent = `共 ${searchResults.length} 条记录`;
+      
+      if (searchResults.length === 0) {
+        resultsElement.classList.add('hidden');
+        noResultElement.classList.remove('hidden');
+        return;
+      }
+      
+      resultsElement.classList.remove('hidden');
+      noResultElement.classList.add('hidden');
+      
+      // 构建结果HTML
+      let resultsHtml = '';
+      searchResults.forEach((person, index) => {
+        resultsHtml += `
+          <div class="border border-neon-blue/20 rounded-lg p-4 hover:border-warm-gold/50 transition-colors">
+            <div class="flex justify-between items-start">
+              <div>
+                <h3 class="text-lg font-cyber text-warm-gold">${person.name}</h3>
+                <p class="text-sm text-gray-400">身份证号: ${person.id}</p>
+              </div>
+              <button onclick="viewPerson(${peopleData.indexOf(person)})" class="win-btn text-neon-blue hover:text-glow-blue transition-colors">
+                <i class="fa fa-eye mr-1"></i> 查看详情
+              </button>
+            </div>
+            
+            <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+              <div><span class="text-neon-blue">手机号:</span> ${person.phone}</div>
+              <div><span class="text-neon-blue">年龄:</span> ${person.age}</div>
+              <div><span class="text-neon-blue">职业:</span> ${person.occupation}</div>
+              <div><span class="text-neon-blue">地址:</span> ${person.address.substring(0, 20)}${person.address.length > 20 ? '...' : ''}</div>
+            </div>
+          </div>
+        `;
+      });
+      
+      resultsElement.innerHTML = resultsHtml;
+    }
+    
+    // 关闭搜索结果
+    function closeResults() {
+      document.getElementById('result-container').classList.add('hidden');
+    }
+    
+    // 页面加载时初始化
     document.addEventListener('DOMContentLoaded', function() {
+      // 性能优化：使用requestIdleCallback延迟加载非关键数据
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(initializeData, { timeout: 1000 });
+      } else {
+        // 降级处理
+        setTimeout(initializeData, 500);
+      }
+      
+      // 绑定事件监听器
+      document.getElementById('add-person').addEventListener('click', openAddModal);
+      document.getElementById('close-modal').addEventListener('click', closeModal);
+      document.getElementById('add-form').addEventListener('submit', handleAddFormSubmit);
+      document.getElementById('clear-all').addEventListener('click', handleClearAll);
+      document.getElementById('update-data').addEventListener('click', handleUpdateData);
+      document.getElementById('confirm-cancel').addEventListener('click', closeConfirmDialog);
+      document.getElementById('confirm-ok').addEventListener('click', executeConfirmAction);
+      document.getElementById('query-btn').addEventListener('click', performSearch);
+      document.getElementById('close-results').addEventListener('click', closeResults);
+      document.getElementById('close-detail').addEventListener('click', closeDetailModal);
+      
+      // 支持回车键查询
+      document.getElementById('query-content').addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+          performSearch();
+        }
+      });
+      
+      // 初始化时间显示
+      updateTime();
+      setInterval(updateTime, 1000);
+    });
+    
+    // 初始化数据
+    function initializeData() {
       // 从localStorage加载永久数据
       let permanentData = loadPermanentData();
       
@@ -748,665 +1365,17 @@
       // 更新记录计数
       updateRecordCount();
       
-      // 其他初始化操作...
+      // 更新服务器状态
       updateServerStats();
-      // 服务器状态更新频率减小为30秒一次
+      // 服务器状态更新频率为30秒一次
       setInterval(updateServerStats, 30000);
-      
-      // 更新时间
-      updateTime();
-      setInterval(updateTime, 1000);
-      
-      // 绑定事件监听器
-      document.getElementById('add-person').addEventListener('click', openAddModal);
-      document.getElementById('close-modal').addEventListener('click', closeModal);
-      document.getElementById('add-form').addEventListener('submit', handleAddFormSubmit);
-      document.getElementById('clear-all').addEventListener('click', handleClearAll);
-      document.getElementById('update-data').addEventListener('click', handleUpdateData);
-      document.getElementById('confirm-cancel').addEventListener('click', closeConfirmDialog);
-      document.getElementById('confirm-ok').addEventListener('click', executeConfirmAction);
-      document.getElementById('query-btn').addEventListener('click', performSearch);
-      document.getElementById('close-results').addEventListener('click', closeResults);
-      
-      // 支持回车键查询
-      document.getElementById('query-content').addEventListener('keyup', function(e) {
-        if (e.key === 'Enter') {
-          performSearch();
-        }
-      });
-    });
-    
-    // 更新表格显示
-    function updateTable() {
-      const tableBody = document.getElementById('data-table-body');
-      
-      if (peopleData.length === 0) {
-        tableBody.innerHTML = `
-          <tr>
-            <td colspan="6" class="py-8 text-center text-gray-500">
-              <i class="fa fa-database mr-2"></i>暂无数据，请添加数据
-            </td>
-          </tr>
-        `;
-        document.getElementById('display-count').textContent = '显示 0 条记录';
-        return;
-      }
-      
-      let html = '';
-      peopleData.forEach((person, index) => {
-        // 检查是否为永久数据
-        const permanentData = loadPermanentData();
-        const isPermanent = permanentData.some(p => p.id === person.id);
-        
-        html += `
-          <tr class="border-b border-neon-blue/10 hover:bg-deep-blue/20 transition-colors">
-            <td class="py-3 px-4">
-              ${person.name}
-              ${isPermanent ? '<span class="ml-2 text-xs bg-warm-gold/20 text-warm-gold px-1 rounded">永久</span>' : ''}
-            </td>
-            <td class="py-3 px-4">${person.id}</td>
-            <td class="py-3 px-4">${person.phone}</td>
-            <td class="py-3 px-4">${person.age}</td>
-            <td class="py-3 px-4">${person.occupation}</td>
-            <td class="py-3 px-4">
-              <div class="flex space-x-2">
-                <button onclick="viewPerson(${index})" class="text-neon-blue hover:text-glow-blue transition-colors" title="查看">
-                  <i class="fa fa-eye"></i>
-                </button>
-                <button onclick="editPerson(${index})" class="text-warm-gold hover:text-yellow-300 transition-colors" title="编辑">
-                  <i class="fa fa-pencil"></i>
-                </button>
-                <button onclick="deletePerson(${index})" class="text-red-400 hover:text-red-300 transition-colors ${isPermanent ? 'opacity-50 cursor-not-allowed' : ''}" title="${isPermanent ? '永久数据不可删除' : '删除'}" ${isPermanent ? 'disabled' : ''}>
-                  <i class="fa fa-trash"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-        `;
-      });
-      
-      tableBody.innerHTML = html;
-      document.getElementById('display-count').textContent = `显示 ${peopleData.length} 条记录`;
     }
     
-    // 更新记录计数
-    function updateRecordCount() {
-      document.getElementById('record-count').textContent = `记录总数: ${peopleData.length}`;
-    }
-    
-    // 更新服务器状态 - 减小了变化频率和幅度
-    function updateServerStats() {
-      // 减小负荷变化范围（从10-70%改为20-60%）
-      const load = Math.floor(Math.random() * 40) + 20; 
-      // 减小温度变化范围（从30-50°C改为35-45°C）
-      const temp = Math.floor(Math.random() * 10) + 35; 
-      
-      document.getElementById('server-load').textContent = `${load}%`;
-      document.getElementById('load-bar').style.width = `${load}%`;
-      
-      document.getElementById('server-temp').textContent = `${temp}°C`;
-      document.getElementById('temp-bar').style.width = `${temp * 2}%`;
-      
-      // 减小数据库人口数波动范围（从-50,000到+50,000改为-10,000到+10,000）
-      const fluctuation = Math.floor(Math.random() * 20000) - 10000; 
-      basePopulation += fluctuation;
-      
-      // 格式化人口数为带逗号的格式
-      const formattedPopulation = basePopulation.toLocaleString();
-      document.getElementById('database-population').textContent = `当前数据库人数: ${formattedPopulation}`;
-    }
-    
-    // 更新时间
-    function updateTime() {
-      const now = new Date();
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const seconds = String(now.getSeconds()).padStart(2, '0');
-      document.getElementById('current-time').textContent = `${hours}:${minutes}:${seconds}`;
-    }
-    
-    // 打开添加人员模态框
-    function openAddModal() {
-      document.getElementById('modal-title').textContent = '添加人员信息';
-      document.getElementById('add-form').reset();
-      document.getElementById('add-modal').classList.remove('hidden');
-      currentAction = { type: 'add' };
-    }
-    
-    // 关闭模态框
-    function closeModal() {
-      document.getElementById('add-modal').classList.add('hidden');
-      currentAction = null;
-    }
-    
-    // 处理添加表单提交
-    function handleAddFormSubmit(e) {
-      e.preventDefault();
-      
-      const person = {
-        name: document.getElementById('name').value,
-        id: document.getElementById('id-card').value,
-        phone: document.getElementById('phone').value,
-        occupation: document.getElementById('occupation').value,
-        age: calculateAge(document.getElementById('id-card').value),
-        qq: document.getElementById('qq').value,
-        wechat: document.getElementById('wechat').value,
-        douyin: document.getElementById('douyin').value,
-        address: document.getElementById('address').value,
-        fatherName: document.getElementById('father-name').value,
-        fatherId: document.getElementById('father-id').value,
-        motherName: document.getElementById('mother-name').value,
-        motherId: document.getElementById('mother-id').value,
-        childrenInfo: document.getElementById('children-info').value
-      };
-      
-      // 处理子女随父亲姓的逻辑
-      if (person.childrenInfo && person.name) {
-        const personFamilyName = getFamilyName(person.name);
-        const children = person.childrenInfo.split(';');
-        const updatedChildren = [];
-        
-        children.forEach(child => {
-          if (child.trim()) {
-            const [childName, childId] = child.split(',');
-            if (childName) {
-              // 确保子女姓与父亲一致
-              const childGivenName = getGivenName(childName);
-              const updatedChildName = personFamilyName + childGivenName;
-              updatedChildren.push(`${updatedChildName}${childId ? ',' + childId : ''}`);
-            }
-          }
-        });
-        
-        person.childrenInfo = updatedChildren.join(';');
-      }
-      
-      // 处理父亲随子女姓的逻辑
-      if (person.fatherName && person.childrenInfo) {
-        const children = person.childrenInfo.split(';');
-        if (children.length > 0) {
-          const firstChild = children[0].split(',')[0];
-          if (firstChild) {
-            const childFamilyName = getFamilyName(firstChild);
-            const fatherGivenName = getGivenName(person.fatherName);
-            person.fatherName = childFamilyName + fatherGivenName;
-          }
-        }
-      }
-      
-      // 从localStorage获取永久数据
-      let permanentData = loadPermanentData();
-      
-      if (currentAction.type === 'add') {
-        // 添加为永久数据
-        permanentData.push(person);
-        savePermanentData(permanentData);
-        
-        // 更新当前数据列表
-        const systemData = loadSystemData();
-        peopleData = [...permanentData, ...systemData];
-        
-        showNotification('添加成功（永久保存）', 'success');
-      } else if (currentAction.type === 'edit') {
-        // 检查是否是永久数据
-        const permanentData = loadPermanentData();
-        const systemData = loadSystemData();
-        
-        // 查找索引
-        const isPermanentIndex = permanentData.findIndex(p => p.id === peopleData[currentAction.index].id);
-        
-        if (isPermanentIndex !== -1) {
-          // 更新永久数据
-          permanentData[isPermanentIndex] = person;
-          savePermanentData(permanentData);
-        } else {
-          // 更新系统数据
-          const systemIndex = systemData.findIndex(p => p.id === peopleData[currentAction.index].id);
-          if (systemIndex !== -1) {
-            systemData[systemIndex] = person;
-            saveSystemData(systemData);
-          }
-        }
-        
-        // 更新当前数据列表
-        peopleData = [...permanentData, ...systemData];
-        showNotification('更新成功', 'success');
-      }
-      
-      closeModal();
-      updateTable();
-      updateRecordCount();
-    }
-    
-    // 查看人员信息
-    function viewPerson(index) {
-      const person = peopleData[index];
-      
-      // 构建家庭成员信息HTML
-      let familyHtml = '';
-      
-      if (person.fatherName) {
-        familyHtml += `
-          <div class="mt-2">
-            <span class="text-warm-gold">父亲:</span> ${person.fatherName} (${person.fatherId || '无身份证号'})
-          </div>
-        `;
-      }
-      
-      if (person.motherName) {
-        familyHtml += `
-          <div class="mt-2">
-            <span class="text-warm-gold">母亲:</span> ${person.motherName} (${person.motherId || '无身份证号'})
-          </div>
-        `;
-      }
-      
-      if (person.childrenInfo) {
-        familyHtml += `<div class="mt-2"><span class="text-warm-gold">子女:</span></div>`;
-        const children = person.childrenInfo.split(';');
-        children.forEach(child => {
-          const [childName, childId] = child.split(',');
-          familyHtml += `
-            <div class="ml-4 mt-1">${childName} (${childId || '无身份证号'})</div>
-          `;
-        });
-      }
-      
-      if (!familyHtml) {
-        familyHtml = '<div class="text-gray-400 italic">无家庭成员信息</div>';
-      }
-      
-      // 检查是否为永久数据
-      const permanentData = loadPermanentData();
-      const isPermanent = permanentData.some(p => p.id === person.id);
-      
-      // 构建人员信息HTML
-      const personHtml = `
-        <div class="glass-effect rounded-lg p-6 border border-neon-blue/20">
-          <div class="flex justify-between items-start mb-4">
-            <h3 class="text-xl font-cyber font-semibold text-warm-gold">
-              ${person.name}
-              ${isPermanent ? '<span class="ml-2 text-sm bg-warm-gold/20 text-warm-gold px-1 rounded">永久</span>' : ''}
-            </h3>
-            <div class="flex space-x-2">
-              <button onclick="editPerson(${index})" class="text-warm-gold hover:text-yellow-300 transition-colors" title="编辑">
-                <i class="fa fa-pencil"></i>
-              </button>
-              <button onclick="deletePerson(${index})" class="text-red-400 hover:text-red-300 transition-colors ${isPermanent ? 'opacity-50 cursor-not-allowed' : ''}" title="${isPermanent ? '永久数据不可删除' : '删除'}" ${isPermanent ? 'disabled' : ''}>
-                <i class="fa fa-trash"></i>
-              </button>
-            </div>
-          </div>
-          
-          <div class="space-y-3">
-            <div><span class="text-neon-blue">身份证号:</span> ${person.id}</div>
-            <div><span class="text-neon-blue">手机号:</span> ${person.phone}</div>
-            <div><span class="text-neon-blue">年龄:</span> ${person.age}岁</div>
-            <div><span class="text-neon-blue">职业:</span> ${person.occupation}</div>
-            ${person.qq ? `<div><span class="text-neon-blue">QQ号:</span> ${person.qq}</div>` : ''}
-            ${person.wechat ? `<div><span class="text-neon-blue">微信号:</span> ${person.wechat}</div>` : ''}
-            ${person.douyin ? `<div><span class="text-neon-blue">抖音号:</span> ${person.douyin}</div>` : ''}
-            ${person.address ? `<div><span class="text-neon-blue">家庭住址:</span> ${person.address}</div>` : ''}
-            
-            <div class="mt-4 pt-4 border-t border-neon-blue/20">
-              <h4 class="text-warm-gold text-sm mb-2">家庭成员信息</h4>
-              ${familyHtml}
-            </div>
-          </div>
-        </div>
-      `;
-      
-      // 显示在结果区域
-      document.getElementById('results').innerHTML = personHtml;
-      document.getElementById('result-count').textContent = `(1 条记录)`;
-      document.getElementById('no-result').classList.add('hidden');
-      document.getElementById('result-container').classList.remove('hidden');
-    }
-    
-    // 编辑人员信息
-    function editPerson(index) {
-      const person = peopleData[index];
-      
-      document.getElementById('modal-title').textContent = '编辑人员信息';
-      document.getElementById('name').value = person.name;
-      document.getElementById('id-card').value = person.id;
-      document.getElementById('phone').value = person.phone;
-      document.getElementById('occupation').value = person.occupation;
-      document.getElementById('qq').value = person.qq;
-      document.getElementById('wechat').value = person.wechat;
-      document.getElementById('douyin').value = person.douyin;
-      document.getElementById('address').value = person.address;
-      document.getElementById('father-name').value = person.fatherName;
-      document.getElementById('father-id').value = person.fatherId;
-      document.getElementById('mother-name').value = person.motherName;
-      document.getElementById('mother-id').value = person.motherId;
-      document.getElementById('children-info').value = person.childrenInfo;
-      
-      document.getElementById('add-modal').classList.remove('hidden');
-      currentAction = { type: 'edit', index };
-    }
-    
-    // 删除人员信息
-    function deletePerson(index) {
-      const person = peopleData[index];
-      
-      // 检查是否为永久数据
-      const permanentData = loadPermanentData();
-      const isPermanent = permanentData.some(p => p.id === person.id);
-      
-      if (isPermanent) {
-        showNotification('永久数据不可删除', 'error');
-        return;
-      }
-      
-      currentAction = { type: 'delete', index };
-      document.getElementById('confirm-message').textContent = `您确定要消除 ${person.name} 的户籍吗？`;
-      document.getElementById('confirm-dialog').classList.remove('hidden');
-    }
-    
-    // 处理清空所有数据
-    function handleClearAll() {
-      // 只清空系统数据，保留永久数据
-      const permanentDataCount = loadPermanentData().length;
-      
-      if (peopleData.length === permanentDataCount) {
-        showNotification('只能清空非永久数据，已没有可清空的数据', 'info');
-        return;
-      }
-      
-      currentAction = { type: 'clearAll' };
-      document.getElementById('confirm-message').textContent = '您确定要清空所有非永久人员信息吗？此操作不可恢复！';
-      document.getElementById('confirm-dialog').classList.remove('hidden');
-    }
-    
-    // 处理更新数据
-    function handleUpdateData() {
-      // 只更新系统数据，保留永久数据
-      const count = Math.floor(Math.random() * 11) + 10;
-      const systemData = generatePeopleData(count);
-      saveSystemData(systemData);
-      
-      const permanentData = loadPermanentData();
-      peopleData = [...permanentData, ...systemData];
-      
-      updateTable();
-      updateRecordCount();
-      showNotification('系统数据已更新（永久数据保留）', 'success');
-    }
-    
-    // 关闭确认对话框
-    function closeConfirmDialog() {
-      document.getElementById('confirm-dialog').classList.add('hidden');
-      currentAction = null;
-    }
-    
-    // 执行确认的操作
-    function executeConfirmAction() {
-      if (currentAction.type === 'delete') {
-        const deletedPerson = peopleData[currentAction.index];
-        
-        // 从系统数据中删除
-        let systemData = loadSystemData();
-        systemData = systemData.filter(p => p.id !== deletedPerson.id);
-        saveSystemData(systemData);
-        
-        // 更新当前数据列表
-        const permanentData = loadPermanentData();
-        peopleData = [...permanentData, ...systemData];
-        
-        updateTable();
-        updateRecordCount();
-        showNotification(`已删除 ${deletedPerson.name} 的信息`, 'success');
-      } else if (currentAction.type === 'clearAll') {
-        // 清空系统数据，但保留永久数据
-        saveSystemData([]);
-        
-        const permanentData = loadPermanentData();
-        peopleData = [...permanentData];
-        
-        updateTable();
-        updateRecordCount();
-        showNotification('所有非永久数据已清空', 'success');
-      }
-      
-      closeConfirmDialog();
-      closeResults();
-    }
-    
-    // 执行搜索
-    function performSearch() {
-      const queryType = document.getElementById('query-type').value;
-      const queryContent = document.getElementById('query-content').value.trim();
-      const errorElement = document.getElementById('query-error');
-      const queryInput = document.getElementById('query-content');
-      
-      // 清除之前的错误状态
-      errorElement.classList.add('hidden');
-      queryInput.classList.remove('error-border');
-      
-      // 验证输入
-      if (!queryContent) {
-        showError('请输入查询内容', errorElement, queryInput);
-        return;
-      }
-      
-      // 特定类型的格式验证
-      if (queryType === 'id' && !validateIdCard(queryContent)) {
-        showError('请输入有效的18位身份证号', errorElement, queryInput);
-        return;
-      }
-      
-      if (queryType === 'phone' && !validatePhone(queryContent)) {
-        showError('请输入有效的11位手机号', errorElement, queryInput);
-        return;
-      }
-      
-      // 先从现有数据中查找匹配项
-      const matches = peopleData.filter(person => {
-        if (queryType === 'name') {
-          return person.name.includes(queryContent);
-        } else if (queryType === 'id') {
-          return person.id === queryContent;
-        } else if (queryType === 'phone') {
-          return person.phone === queryContent;
-        } else if (queryType === 'qq') {
-          return person.qq === queryContent;
-        } else if (queryType === 'wechat') {
-          return person.wechat === queryContent;
-        } else if (queryType === 'douyin') {
-          return person.douyin === queryContent;
-        }
-        return false;
-      });
-      
-      // 如果找到匹配项，直接使用
-      if (matches.length > 0) {
-        searchResults = matches;
-      } else {
-        // 没有找到匹配项，生成新数据
-        if (queryType === 'name') {
-          // 姓名查询：生成3-15个同名的人
-          const count = Math.floor(Math.random() * 13) + 3; // 3-15
-          searchResults = generatePeopleData(count, { name: queryContent });
-        } else {
-          // 其他类型查询：生成1个匹配的人
-          const customFields = {};
-          customFields[queryType] = queryContent;
-          searchResults = generatePeopleData(1, customFields);
-        }
-      }
-      
-      // 显示搜索结果
-      displaySearchResults();
-    }
-    
-    // 显示错误信息
-    function showError(message, errorElement, inputElement) {
-      errorElement.textContent = message;
-      errorElement.classList.remove('hidden');
-      inputElement.classList.add('error-border');
-    }
-    
-    // 显示搜索结果
-    function displaySearchResults() {
-      if (searchResults.length === 0) {
-        document.getElementById('results').innerHTML = '';
-        document.getElementById('result-count').textContent = '';
-        document.getElementById('no-result').classList.remove('hidden');
-        document.getElementById('result-container').classList.remove('hidden');
-        return;
-      }
-      
-      let resultsHtml = '';
-      searchResults.forEach((person, index) => {
-        // 检查是否为永久数据
-        const permanentData = loadPermanentData();
-        const isPermanent = permanentData.some(p => p.id === person.id);
-        
-        // 构建简要信息HTML
-        resultsHtml += `
-          <div class="glass-effect rounded-lg p-4 border border-neon-blue/20 hover:border-neon-blue/50 transition-colors">
-            <div class="flex justify-between items-start">
-              <div>
-                <h3 class="text-lg font-cyber font-semibold text-warm-gold">
-                  ${person.name}
-                  ${isPermanent ? '<span class="ml-2 text-xs bg-warm-gold/20 text-warm-gold px-1 rounded">永久</span>' : ''}
-                </h3>
-                <div class="mt-2 space-y-1 text-sm">
-                  <div><span class="text-neon-blue">身份证号:</span> ${person.id}</div>
-                  <div><span class="text-neon-blue">手机号:</span> ${person.phone}</div>
-                  <div><span class="text-neon-blue">年龄:</span> ${person.age}岁</div>
-                  <div><span class="text-neon-blue">职业:</span> ${person.occupation}</div>
-                </div>
-              </div>
-              <button onclick="viewSearchResult(${index})" class="text-neon-blue hover:text-glow-blue transition-colors px-3 py-1 border border-neon-blue/30 rounded text-sm">
-                查看详情
-              </button>
-            </div>
-          </div>
-        `;
-      });
-      
-      document.getElementById('results').innerHTML = resultsHtml;
-      document.getElementById('result-count').textContent = `(${searchResults.length} 条记录)`;
-      document.getElementById('no-result').classList.add('hidden');
-      document.getElementById('result-container').classList.remove('hidden');
-    }
-    
-    // 查看搜索结果详情
-    function viewSearchResult(index) {
-      const person = searchResults[index];
-      
-      // 构建家庭成员信息HTML
-      let familyHtml = '';
-      
-      if (person.fatherName) {
-        familyHtml += `
-          <div class="mt-2">
-            <span class="text-warm-gold">父亲:</span> ${person.fatherName} (${person.fatherId || '无身份证号'})
-          </div>
-        `;
-      }
-      
-      if (person.motherName) {
-        familyHtml += `
-          <div class="mt-2">
-            <span class="text-warm-gold">母亲:</span> ${person.motherName} (${person.motherId || '无身份证号'})
-          </div>
-        `;
-      }
-      
-      if (person.childrenInfo) {
-        familyHtml += `<div class="mt-2"><span class="text-warm-gold">子女:</span></div>`;
-        const children = person.childrenInfo.split(';');
-        children.forEach(child => {
-          const [childName, childId] = child.split(',');
-          familyHtml += `
-            <div class="ml-4 mt-1">${childName} (${childId || '无身份证号'})</div>
-          `;
-        });
-      }
-      
-      if (!familyHtml) {
-        familyHtml = '<div class="text-gray-400 italic">无家庭成员信息</div>';
-      }
-      
-      // 检查是否为永久数据
-      const permanentData = loadPermanentData();
-      const isPermanent = permanentData.some(p => p.id === person.id);
-      
-      // 构建人员信息HTML
-      const personHtml = `
-        <div class="glass-effect rounded-lg p-6 border border-neon-blue/20">
-          <div class="flex justify-between items-start mb-4">
-            <h3 class="text-xl font-cyber font-semibold text-warm-gold">
-              ${person.name}
-              ${isPermanent ? '<span class="ml-2 text-sm bg-warm-gold/20 text-warm-gold px-1 rounded">永久</span>' : ''}
-            </h3>
-            <button onclick="displaySearchResults()" class="text-gray-400 hover:text-white transition-colors" title="返回列表">
-              <i class="fa fa-arrow-left"></i> 返回列表
-            </button>
-          </div>
-          
-          <div class="space-y-3">
-            <div><span class="text-neon-blue">身份证号:</span> ${person.id}</div>
-            <div><span class="text-neon-blue">手机号:</span> ${person.phone}</div>
-            <div><span class="text-neon-blue">年龄:</span> ${person.age}岁</div>
-            <div><span class="text-neon-blue">职业:</span> ${person.occupation}</div>
-            ${person.qq ? `<div><span class="text-neon-blue">QQ号:</span> ${person.qq}</div>` : ''}
-            ${person.wechat ? `<div><span class="text-neon-blue">微信号:</span> ${person.wechat}</div>` : ''}
-            ${person.douyin ? `<div><span class="text-neon-blue">抖音号:</span> ${person.douyin}</div>` : ''}
-            ${person.address ? `<div><span class="text-neon-blue">家庭住址:</span> ${person.address}</div>` : ''}
-            
-            <div class="mt-4 pt-4 border-t border-neon-blue/20">
-              <h4 class="text-warm-gold text-sm mb-2">家庭成员信息</h4>
-              ${familyHtml}
-            </div>
-          </div>
-        </div>
-      `;
-      
-      // 显示详情
-      document.getElementById('results').innerHTML = personHtml;
-    }
-    
-    // 关闭搜索结果
-    function closeResults() {
-      document.getElementById('result-container').classList.add('hidden');
-    }
-    
-    // 显示通知
-    function showNotification(message, type = 'info') {
-      const notification = document.getElementById('notification');
-      
-      // 设置通知样式
-      if (type === 'success') {
-        notification.className = 'fixed top-4 right-4 p-4 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 z-50 max-w-xs bg-green-900/80 border border-green-500 text-white';
-      } else if (type === 'error') {
-        notification.className = 'fixed top-4 right-4 p-4 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 z-50 max-w-xs bg-red-900/80 border border-red-500 text-white';
-      } else {
-        notification.className = 'fixed top-4 right-4 p-4 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 z-50 max-w-xs bg-blue-900/80 border border-blue-500 text-white';
-      }
-      
-      notification.textContent = message;
-      
-      // 显示通知
-      setTimeout(() => {
-        notification.classList.remove('translate-x-full');
-      }, 10);
-      
-      // 3秒后隐藏通知
-      setTimeout(() => {
-        notification.classList.add('translate-x-full');
-      }, 3000);
-    }
-    
-    // 暴露函数到全局
+    // 暴露函数到全局，供内联事件调用
     window.viewPerson = viewPerson;
     window.editPerson = editPerson;
     window.deletePerson = deletePerson;
-    window.viewSearchResult = viewSearchResult;
-    window.displaySearchResults = displaySearchResults;
+    window.closeDetailModal = closeDetailModal;
   </script>
 </body>
 </html>
