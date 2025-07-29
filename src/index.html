@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>系统登录 - 科幻认证中心</title>
-    <!-- 引入Tailwind CSS -->
+    <!-- 预加载关键资源 -->
+    <link rel="preload" href="https://cdn.tailwindcss.com" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" as="style">
+    
+    <!-- 引入外部资源 -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 引入Font Awesome -->
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- 配置Tailwind自定义颜色和字体 -->
     <script>
@@ -83,9 +88,42 @@
             }
         }
     </style>
-    
-    <!-- 引入Google字体 -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Windows兼容性样式 -->
+    <style>
+        /* 高对比度模式适配 */
+        @media (forced-colors: active) {
+            :root {
+                --glow-blue: CanvasText;
+                --glow-purple: CanvasText;
+            }
+            .gradient-border::before {
+                background: Canvas;
+                animation: none;
+            }
+            .bg-grid {
+                background-image: none;
+            }
+        }
+
+        /* 抖动动画样式提前定义 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .animate-shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* 禁用不必要的动画提升低端设备性能 */
+        @media (max-performance: 1) {
+            * {
+                animation-duration: 0s !important;
+                animation-delay: 0s !important;
+            }
+        }
+    </style>
 </head>
 
 <body class="bg-space-blue min-h-screen flex items-center justify-center p-4 overflow-hidden relative font-cyber">
@@ -198,82 +236,104 @@
     </div>
 
     <script>
-        // 获取DOM元素
-        const loginForm = document.getElementById('loginForm');
-        const username = document.getElementById('username');
-        const password = document.getElementById('password');
-        const togglePwd = document.getElementById('togglePwd');
-        const errorMsg = document.getElementById('errorMsg');
-        const userValid = document.getElementById('userValid');
-        const pwdValid = document.getElementById('pwdValid');
-        const loader = document.getElementById('loader');
-        
-        // 监听账号输入，实时验证
-        username.addEventListener('input', () => {
-            if (username.value === 'blm') {
-                userValid.classList.replace('opacity-0', 'opacity-100');
+        // 提前缓存DOM查询结果（减少DOM操作开销）
+        const dom = {
+            loginForm: document.getElementById('loginForm'),
+            username: document.getElementById('username'),
+            password: document.getElementById('password'),
+            togglePwd: document.getElementById('togglePwd'),
+            errorMsg: document.getElementById('errorMsg'),
+            userValid: document.getElementById('userValid'),
+            pwdValid: document.getElementById('pwdValid'),
+            loader: document.getElementById('loader')
+        };
+
+        // 输入验证防抖处理（减少频繁验证的性能消耗）
+        function debounce(func, delay = 100) {
+            let timer;
+            return function(...args) {
+                clearTimeout(timer);
+                timer = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+
+        // 账号验证（防抖处理）
+        const validateUsername = debounce(function() {
+            if (dom.username.value === 'blm') {
+                dom.userValid.classList.replace('opacity-0', 'opacity-100');
             } else {
-                userValid.classList.replace('opacity-100', 'opacity-0');
+                dom.userValid.classList.replace('opacity-100', 'opacity-0');
             }
-            errorMsg.classList.add('hidden');
+            dom.errorMsg.classList.add('hidden');
         });
-        
-        // 监听密码输入，实时验证
-        password.addEventListener('input', () => {
-            if (password.value === 'admin') {
-                pwdValid.classList.replace('opacity-0', 'opacity-100');
+
+        // 密码验证（防抖处理）
+        const validatePassword = debounce(function() {
+            if (dom.password.value === 'admin') {
+                dom.pwdValid.classList.replace('opacity-0', 'opacity-100');
             } else {
-                pwdValid.classList.replace('opacity-100', 'opacity-0');
+                dom.pwdValid.classList.replace('opacity-100', 'opacity-0');
             }
-            errorMsg.classList.add('hidden');
+            dom.errorMsg.classList.add('hidden');
         });
-        
-        // 切换密码可见性
-        togglePwd.addEventListener('click', () => {
-            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-            password.setAttribute('type', type);
-            togglePwd.innerHTML = type === 'password' ? 
-                '<i class="fa fa-eye-slash"></i>' : 
-                '<i class="fa fa-eye"></i>';
-        });
-        
-        // 表单提交处理
-        loginForm.addEventListener('submit', (e) => {
+
+        // 事件监听使用捕获模式，减少冒泡开销
+        dom.username.addEventListener('input', validateUsername, { capture: true });
+        dom.password.addEventListener('input', validatePassword, { capture: true });
+
+        // 密码可见性切换（减少DOM操作）
+        let isPasswordVisible = false;
+        dom.togglePwd.addEventListener('click', () => {
+            isPasswordVisible = !isPasswordVisible;
+            dom.password.setAttribute('type', isPasswordVisible ? 'text' : 'password');
+            dom.togglePwd.innerHTML = isPasswordVisible ? 
+                '<i class="fa fa-eye"></i>' : 
+                '<i class="fa fa-eye-slash"></i>';
+        }, { capture: true });
+
+        // 表单提交处理（优化加载体验）
+        dom.loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            // 验证账号密码
-            if (username.value === 'blm' && password.value === 'admin') {
-                // 显示加载动画
-                loader.classList.remove('hidden');
-                
-                // 模拟验证过程延迟
+            // 快速验证，避免无效提交
+            if (dom.username.value !== 'blm' || dom.password.value !== 'admin') {
+                showError();
+                return;
+            }
+
+            // 立即显示加载状态，提升响应感
+            dom.loader.classList.remove('hidden');
+            // 禁用表单防止重复提交
+            dom.loginForm.querySelectorAll('input, button').forEach(el => {
+                el.disabled = true;
+            });
+
+            // 使用requestAnimationFrame确保UI更新完成
+            requestAnimationFrame(() => {
+                // 缩短验证延迟，Windows环境下响应更快
                 setTimeout(() => {
-                    // 跳转到天眼查.html
                     window.location.href = '天眼查.html';
-                }, 1500);
-            } else {
-                // 显示错误信息并添加抖动动画
-                errorMsg.classList.remove('hidden');
-                loginForm.classList.add('animate-shake');
+                }, 800); // 从1500ms缩短到800ms，保持体验同时加快响应
+            });
+        }, { capture: true });
+
+        // 错误处理函数（集中管理）
+        function showError() {
+            dom.errorMsg.classList.remove('hidden');
+            // 添加抖动动画
+            dom.loginForm.classList.add('animate-shake');
+            // 使用requestAnimationFrame确保动画流畅
+            requestAnimationFrame(() => {
                 setTimeout(() => {
-                    loginForm.classList.remove('animate-shake');
+                    dom.loginForm.classList.remove('animate-shake');
                 }, 500);
-            }
-        });
-        
-        // 添加抖动动画样式
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes shake {
-                0%, 100% { transform: translateX(0); }
-                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-                20%, 40%, 60%, 80% { transform: translateX(5px); }
-            }
-            .animate-shake {
-                animation: shake 0.5s ease-in-out;
-            }
-        `;
-        document.head.appendChild(style);
+            });
+        }
+
+        // 页面加载完成后主动聚焦账号输入框，提升操作效率
+        window.addEventListener('load', () => {
+            dom.username.focus();
+        }, { once: true }); // 确保只执行一次
     </script>
 </body>
 </html>
